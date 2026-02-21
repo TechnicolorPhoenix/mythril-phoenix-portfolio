@@ -1,0 +1,39 @@
+---
+// src/components/ProjectCard.astro
+interface Props {
+  title: string;
+  description: string;
+  tags: string[];
+  videoUrl?: string;
+  imageUrl: string;
+  githubUrl?: string;
+  gameUrl?: string;
+}
+const { title, description, tags, videoUrl, imageUrl, githubUrl, gameUrl } = Astro.props;
+---
+<div class="group relative overflow-hidden rounded-xl bg-slate-900 border border-slate-800 hover:border-blue-500 transition-all">
+  <div class="aspect-video w-full overflow-hidden">
+    {videoUrl ? (
+      <video 
+        src={videoUrl} 
+        poster={imageUrl} 
+        autoplay muted loop playsinline 
+        class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"
+      />
+    ) : (
+      <img src={imageUrl} alt={title} class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" />
+    )}
+  </div>
+  
+  <div class="p-6">
+    <h3 class="text-xl font-bold text-white mb-2">{title}</h3>
+    <p class="text-slate-400 text-sm mb-4">{description}</p>
+    <div class="flex flex-wrap gap-2 mb-4">
+      {tags.map(tag => <span class="text-xs bg-slate-800 text-blue-400 px-2 py-1 rounded">{tag}</span>)}
+    </div>
+    <div class="flex gap-4">
+      {githubUrl && <a href={githubUrl} class="text-white hover:text-blue-400 text-sm font-medium">View Code →</a>}
+      {gameUrl && <a href={gameUrl} class="text-white hover:text-green-400 text-sm font-medium">Play Game →</a>}
+    </div>
+  </div>
+</div>
