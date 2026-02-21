@@ -1,0 +1,21 @@
+---
+// src/components/Hero.astro
+---
+<section class="relative h-[70vh] flex items-center justify-center overflow-hidden">
+  <video 
+    autoplay muted loop playsinline 
+    class="absolute z-0 min-w-full min-h-full object-cover opacity-40 grayscale hover:grayscale-0 transition-all duration-700"
+  >
+    <source src="/videos/demo-reel-2024.mp4" type="video/mp4" />
+  </video>
+
+  <div class="relative z-10 text-center px-4">
+    <h1 class="text-6xl font-black tracking-tighter text-white mb-4">MYTHRIL PHOENIX</h1>
+    <p class="text-xl text-blue-400 font-mono uppercase tracking-widest">Polymath Developer | Gameplay & Web Systems</p>
+    <div class="mt-8 flex justify-center gap-6">
+      <a href="https://github.com/youruser" class="hover:scale-110 transition-transform">GitHub</a>
+      <a href="#" class="hover:scale-110 transition-transform">BlueSky</a>
+      <a href="#" class="hover:scale-110 transition-transform">LinkedIn</a>
+    </div>
+  </div>
+</section>
