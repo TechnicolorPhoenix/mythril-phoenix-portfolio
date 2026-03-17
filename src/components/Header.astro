@@ -41,11 +41,11 @@ import { SITE_TITLE } from '../consts';
 		z-index: 100;
 		margin: 0;
 		padding: 0 2rem;
-		/* FIX: was background:white — now dark with blur to match dark portfolio */
 		background: rgba(11, 12, 14, 0.88);
 		backdrop-filter: blur(12px);
 		-webkit-backdrop-filter: blur(12px);
-		border-bottom: 0.5px solid rgba(255,255,255,0.07);
+		/* PALETTE: cobalt-tinted nav border */
+		border-bottom: 0.5px solid rgba(43,95,217,0.2);
 	}
 	h2 {
 		margin: 0;
@@ -58,7 +58,7 @@ import { SITE_TITLE } from '../consts';
 		font-weight: 700;
 		letter-spacing: 0.12em;
 		text-transform: uppercase;
-		/* FIX: gold accent for logo, readable on dark nav */
+		/* PALETTE: logo gold — brand identity anchor */
 		color: #C9A84C;
 	}
 	nav {
@@ -69,7 +69,6 @@ import { SITE_TITLE } from '../consts';
 	}
 	nav a {
 		padding: 0.5em 0.6em;
-		/* FIX: was var(--black) which is near-black — now light for dark nav */
 		color: #9A9590;
 		border-bottom: 2px solid transparent;
 		text-decoration: none;
@@ -77,30 +76,28 @@ import { SITE_TITLE } from '../consts';
 		letter-spacing: 0.06em;
 		transition: color 0.2s, border-color 0.2s;
 	}
-	nav a:hover {
-		color: #F0EDE6;
-	}
+	/* PALETTE: nav hover cornflower */
+	nav a:hover { color: #6B9BF2; }
 	nav a.active {
 		text-decoration: none;
 		color: #F0EDE6;
-		border-bottom-color: #C9A84C;
+		/* PALETTE: active underline cobalt */
+		border-bottom-color: #2B5FD9;
 	}
 	.social-links,
 	.social-links a {
 		display: flex;
 		align-items: center;
 	}
-	.social-links {
-		gap: 0.75rem;
-	}
+	.social-links { gap: 0.75rem; }
 	.social-links a {
-		/* FIX: was inheriting dark color — now light for dark nav */
 		color: #5C5850;
 		transition: color 0.2s;
 	}
-	.social-links a:hover {
-		color: #C9A84C;
-	}
+	/* PALETTE: GitHub gold, Bluesky cornflower, LinkedIn cobalt */
+	.social-links a:nth-child(1):hover { color: #C9A84C; }
+	.social-links a:nth-child(2):hover { color: #6B9BF2; }
+	.social-links a:nth-child(3):hover { color: #2B5FD9; }
 	@media (max-width: 720px) {
 		.social-links { display: none; }
 		header { padding: 0 1rem; }
