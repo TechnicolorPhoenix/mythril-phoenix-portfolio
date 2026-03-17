@@ -23,11 +23,9 @@ const projects = [
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 		<style>
-			/* ── Page-level layout ────────────────────────────────────────── */
+			/* ── Page-level layout ──────────────────────────────────────────── */
 			body {
-				/* Ensure the dark bg covers the whole page, not just 600px */
 				background-color: #0B0C0E;
-				/* Offset fixed header so content isn't hidden beneath it */
 				padding-top: 64px;
 			}
 
@@ -37,13 +35,20 @@ const projects = [
 				padding: 0 2rem;
 			}
 
-			/* ── Hero section ─────────────────────────────────────────────── */
+			/* ── Hero ───────────────────────────────────────────────────────── */
 			.hero-section {
 				padding: 5rem 0 0;
 				display: flex;
 				flex-direction: column;
 				align-items: center;
 				text-align: center;
+			}
+
+			.hero-video-spacer {
+				padding-bottom: 1rem;
+				width: 100%;
+				display: flex;
+				justify-content: center;
 			}
 
 			.hero-video-wrapper {
@@ -53,20 +58,14 @@ const projects = [
 				aspect-ratio: 16 / 9;
 				border-radius: 4px;
 				overflow: hidden;
-				border: 0.5px solid rgba(201,168,76,0.25);
-				box-shadow: 0 0 60px rgba(0,0,0,0.6);
-				/* FIX: was mb-10 only — now has explicit bottom margin for breathing room */
+				/* PALETTE: gold top border, cobalt glow in shadow */
+				border: 0.5px solid rgba(201,168,76,0.3);
+				box-shadow: 0 0 0 1px rgba(43,95,217,0.12), 0 0 60px rgba(0,0,0,0.7);
 				margin-bottom: 3.5rem;
 			}
 
-			/* FIX: padding BELOW the showcase video before the heading */
-			.hero-video-spacer {
-				padding-bottom: 1rem;
-			}
-
 			.hero-video-wrapper video {
-				width: 100%;
-				height: 100%;
+				width: 100%; height: 100%;
 				object-fit: cover;
 				display: block;
 			}
@@ -82,31 +81,29 @@ const projects = [
 				transition: opacity 0.2s;
 				cursor: pointer;
 			}
-			.hero-video-wrapper:hover .hero-play-overlay {
-				opacity: 1;
-			}
+			.hero-video-wrapper:hover .hero-play-overlay { opacity: 1; }
 
+			/* PALETTE: reel label in cornflower — ambient, informational */
 			.hero-reel-label {
 				position: absolute;
-				bottom: 1rem;
-				left: 1.25rem;
+				bottom: 1rem; left: 1.25rem;
 				font-family: 'Courier New', monospace;
 				font-size: 0.65rem;
 				font-weight: 700;
 				letter-spacing: 0.2em;
 				text-transform: uppercase;
-				color: #C9A84C;
+				color: #6B9BF2;
 				pointer-events: none;
 			}
 
+			/* PALETTE: name sweeps gold → white → cornflower */
 			.hero-name {
 				font-size: clamp(3rem, 9vw, 6.5rem);
 				font-weight: 900;
 				letter-spacing: -0.02em;
 				line-height: 0.95;
-				/* FIX: gradient clip text — explicit color fallback is now light */
 				color: #F0EDE6;
-				background: linear-gradient(135deg, #F0EDE6 30%, #C9A84C 100%);
+				background: linear-gradient(125deg, #C9A84C 0%, #F0EDE6 45%, #6B9BF2 100%);
 				-webkit-background-clip: text;
 				-webkit-text-fill-color: transparent;
 				background-clip: text;
@@ -114,7 +111,6 @@ const projects = [
 			}
 
 			.hero-tagline {
-				/* FIX: explicit light secondary color — no inherited dark */
 				color: #9A9590;
 				font-size: clamp(0.95rem, 2vw, 1.1rem);
 				max-width: 560px;
@@ -144,6 +140,7 @@ const projects = [
 				text-decoration: none;
 				transition: all 0.2s;
 			}
+			/* PALETTE: primary CTA gold — brand/identity action */
 			.btn-primary {
 				background: #C9A84C;
 				color: #0B0C0E;
@@ -154,21 +151,24 @@ const projects = [
 				color: #0B0C0E;
 				transform: translateY(-1px);
 			}
+			/* PALETTE: secondary CTA cobalt — technical/interactive action */
 			.btn-ghost {
 				background: transparent;
-				color: #F0EDE6;
-				border: 0.5px solid rgba(255,255,255,0.2);
+				color: #6B9BF2;
+				border: 0.5px solid rgba(43,95,217,0.4);
 			}
 			.btn-ghost:hover {
-				border-color: #C9A84C;
-				color: #C9A84C;
+				background: rgba(43,95,217,0.08);
+				border-color: #6B9BF2;
+				color: #93b8ff;
 			}
 
-			/* ── Skills ticker ────────────────────────────────────────────── */
+			/* ── Skills ticker ──────────────────────────────────────────────── */
 			.skills-strip {
-				background: #111318;
-				border-top: 0.5px solid rgba(255,255,255,0.07);
-				border-bottom: 0.5px solid rgba(255,255,255,0.07);
+				/* PALETTE: darker strip with cobalt border tint */
+				background: #0E1018;
+				border-top: 0.5px solid rgba(43,95,217,0.18);
+				border-bottom: 0.5px solid rgba(43,95,217,0.18);
 				padding: 1.25rem 0;
 				overflow: hidden;
 				position: relative;
@@ -191,19 +191,26 @@ const projects = [
 				font-weight: 700;
 				letter-spacing: 0.1em;
 				text-transform: uppercase;
-				/* FIX: explicit light color on dark strip */
 				color: #9A9590;
 				white-space: nowrap;
 				padding: 0.25rem 0.8rem;
-				border: 0.5px solid rgba(255,255,255,0.07);
+				/* PALETTE: cobalt-tinted chip border */
+				border: 0.5px solid rgba(43,95,217,0.2);
 				border-radius: 2px;
 			}
-			.skill-chip::before {
+			/* PALETTE: alternating gold/cobalt dots for rhythm */
+			.skill-chip:nth-child(odd)::before {
 				content: '';
-				width: 4px;
-				height: 4px;
+				width: 4px; height: 4px;
 				border-radius: 50%;
 				background: #C9A84C;
+				flex-shrink: 0;
+			}
+			.skill-chip:nth-child(even)::before {
+				content: '';
+				width: 4px; height: 4px;
+				border-radius: 50%;
+				background: #2B5FD9;
 				flex-shrink: 0;
 			}
 
@@ -212,39 +219,38 @@ const projects = [
 				to   { transform: translateX(-50%); }
 			}
 
-			/* ── Featured Work section ────────────────────────────────────── */
-			.section-work {
-				padding: 5rem 0;
-			}
-
+			/* ── Section labels ─────────────────────────────────────────────── */
 			.section-label {
 				font-family: 'Courier New', monospace;
 				font-size: 0.68rem;
 				font-weight: 700;
 				letter-spacing: 0.28em;
 				text-transform: uppercase;
-				/* FIX: explicit gold — not inherited dark */
+				/* PALETTE: label is gold */
 				color: #C9A84C;
 				margin-bottom: 0.75rem;
 				display: flex;
 				align-items: center;
 				gap: 0.75rem;
 			}
+			/* PALETTE: rule fades gold into cobalt */
 			.section-label::after {
 				content: '';
 				height: 0.5px;
 				width: 60px;
-				background: rgba(201,168,76,0.3);
+				background: linear-gradient(to right, rgba(201,168,76,0.6), rgba(43,95,217,0.35));
 			}
 
 			.section-heading {
-				/* FIX: explicit light heading color */
 				color: #F0EDE6;
 				font-size: clamp(1.8rem, 4vw, 2.8rem);
 				font-weight: 900;
 				letter-spacing: -0.01em;
 				margin-bottom: 3rem;
 			}
+
+			/* ── Featured Work ──────────────────────────────────────────────── */
+			.section-work { padding: 5rem 0; }
 
 			.projects-grid {
 				display: grid;
@@ -256,12 +262,26 @@ const projects = [
 				background: #161A22;
 				border: 0.5px solid rgba(255,255,255,0.07);
 				overflow: hidden;
-				transition: border-color 0.25s, transform 0.25s;
+				transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
 			}
+			/* PALETTE: card hover glows cobalt */
 			.project-card:hover {
-				border-color: rgba(201,168,76,0.35);
+				border-color: rgba(43,95,217,0.45);
 				transform: translateY(-3px);
+				box-shadow: 0 8px 32px rgba(43,95,217,0.1);
 			}
+
+			/* PALETTE: gold-to-cobalt bar sweeps in on card hover */
+			.project-card::before {
+				content: '';
+				display: block;
+				height: 2px;
+				background: linear-gradient(to right, #C9A84C, #2B5FD9);
+				transform: scaleX(0);
+				transform-origin: left;
+				transition: transform 0.3s ease;
+			}
+			.project-card:hover::before { transform: scaleX(1); }
 
 			.project-media {
 				aspect-ratio: 16 / 9;
@@ -271,8 +291,7 @@ const projects = [
 			}
 			.project-media video,
 			.project-media img {
-				width: 100%;
-				height: 100%;
+				width: 100%; height: 100%;
 				object-fit: cover;
 				display: block;
 				transition: transform 0.4s, opacity 0.3s;
@@ -284,12 +303,9 @@ const projects = [
 				opacity: 1;
 			}
 
-			.project-body {
-				padding: 1.5rem;
-			}
+			.project-body { padding: 1.5rem; }
 
 			.project-title {
-				/* FIX: explicit light color */
 				color: #F0EDE6;
 				font-size: 1.2rem;
 				font-weight: 700;
@@ -297,7 +313,6 @@ const projects = [
 			}
 
 			.project-desc {
-				/* FIX: explicit secondary light color — was inheriting gray-dark */
 				color: #9A9590;
 				font-size: 0.875rem;
 				line-height: 1.65;
@@ -311,18 +326,30 @@ const projects = [
 				margin-bottom: 1.25rem;
 			}
 
+			/* PALETTE: tags cycle gold / cobalt / cornflower */
 			.project-tag {
 				font-family: 'Courier New', monospace;
 				font-size: 0.6rem;
 				font-weight: 700;
 				letter-spacing: 0.1em;
 				text-transform: uppercase;
-				/* FIX: explicit colors — not inherited */
-				background: rgba(201,168,76,0.08);
-				color: #C9A84C;
-				border: 0.5px solid rgba(201,168,76,0.2);
 				padding: 0.2rem 0.6rem;
 				border-radius: 2px;
+			}
+			.project-tag:nth-child(3n+1) {
+				background: rgba(201,168,76,0.08);
+				color: #C9A84C;
+				border: 0.5px solid rgba(201,168,76,0.22);
+			}
+			.project-tag:nth-child(3n+2) {
+				background: rgba(43,95,217,0.08);
+				color: #6B9BF2;
+				border: 0.5px solid rgba(43,95,217,0.22);
+			}
+			.project-tag:nth-child(3n) {
+				background: rgba(107,155,242,0.06);
+				color: #93b8ff;
+				border: 0.5px solid rgba(107,155,242,0.18);
 			}
 
 			.project-links {
@@ -341,14 +368,15 @@ const projects = [
 				font-weight: 700;
 				letter-spacing: 0.1em;
 				text-transform: uppercase;
-				/* FIX: explicit muted light */
 				color: #5C5850;
 				text-decoration: none;
 				transition: color 0.2s;
 			}
-			.project-link:hover { color: #C9A84C; }
+			/* PALETTE: Source → gold, Live → cobalt */
+			.project-link:first-child:hover { color: #C9A84C; }
+			.project-link:last-child:hover  { color: #6B9BF2; }
 
-			/* ── Credits table ────────────────────────────────────────────── */
+			/* ── Credits table ──────────────────────────────────────────────── */
 			.section-credits {
 				padding: 5rem 0;
 				border-top: 0.5px solid rgba(255,255,255,0.07);
@@ -357,12 +385,13 @@ const projects = [
 			.credits-table {
 				width: 100%;
 				border-collapse: collapse;
-				margin-top: 0;
 				font-size: 0.9rem;
 			}
 
 			.credits-table thead tr {
-				border-bottom: 0.5px solid rgba(201,168,76,0.25);
+				/* PALETTE: header rule is a gold-to-cobalt gradient line */
+				border-bottom: 1px solid;
+				border-image: linear-gradient(to right, rgba(201,168,76,0.5), rgba(43,95,217,0.35)) 1;
 			}
 
 			.credits-table th {
@@ -371,7 +400,6 @@ const projects = [
 				font-weight: 700;
 				letter-spacing: 0.22em;
 				text-transform: uppercase;
-				/* FIX: explicit gold — was inheriting text-slate-500 which is too dim */
 				color: #C9A84C;
 				padding: 0.75rem 0.75rem 0.75rem 0;
 				text-align: left;
@@ -379,35 +407,31 @@ const projects = [
 
 			.credits-table td {
 				padding: 1rem 0.75rem 1rem 0;
-				border-bottom: 0.5px solid rgba(255,255,255,0.07);
+				border-bottom: 0.5px solid rgba(255,255,255,0.06);
 				vertical-align: middle;
-				/* FIX: was unset — now explicit light so it reads on dark background */
 				color: #F0EDE6;
 			}
 
 			.credits-table tr:last-child td { border-bottom: none; }
+			/* PALETTE: row hover shimmer blends gold and cobalt */
 			.credits-table tbody tr:hover td {
-				background: rgba(201,168,76,0.03);
+				background: linear-gradient(to right, rgba(201,168,76,0.03), rgba(43,95,217,0.05));
 			}
 
 			.td-year {
 				font-family: 'Courier New', monospace;
 				font-size: 0.8rem;
-				/* FIX: explicit muted-light for year column */
 				color: #5C5850 !important;
 				letter-spacing: 0.06em;
 			}
 
 			.td-project {
 				font-weight: 700;
-				/* FIX: explicit primary-light — was text-white which needs dark bg */
 				color: #F0EDE6 !important;
 			}
 
-			.td-role {
-				/* FIX: was text-blue-400 — now gold for palette consistency */
-				color: #C9A84C !important;
-			}
+			/* PALETTE: role column is cornflower — technical category */
+			.td-role { color: #6B9BF2 !important; }
 
 			.status-pill {
 				display: inline-flex;
@@ -421,36 +445,39 @@ const projects = [
 				padding: 0.22rem 0.65rem;
 				border-radius: 2px;
 			}
+			/* PALETTE: released = cobalt (complete/technical), wip = gold (in progress/craft) */
 			.status-pill.released {
-				background: rgba(26,74,26,0.5);
-				/* FIX: explicit light green — was inheriting text-xs with no color set */
-				color: #6FCF97;
-				border: 0.5px solid rgba(111,207,151,0.2);
+				background: rgba(43,95,217,0.1);
+				color: #6B9BF2;
+				border: 0.5px solid rgba(43,95,217,0.25);
 			}
 			.status-pill.wip {
-				background: rgba(74,55,10,0.5);
-				color: #F2C94C;
-				border: 0.5px solid rgba(242,201,76,0.2);
+				background: rgba(201,168,76,0.1);
+				color: #C9A84C;
+				border: 0.5px solid rgba(201,168,76,0.25);
+			}
+			.status-pill.cancelled {
+				background: rgba(180,60,60,0.1);
+				color: #E07070;
+				border: 0.5px solid rgba(180,60,60,0.2);
 			}
 			.status-dot {
 				width: 5px; height: 5px;
 				border-radius: 50%;
 				flex-shrink: 0;
 			}
-			.released .status-dot { background: #6FCF97; }
-			.wip      .status-dot { background: #F2C94C; }
+			.released  .status-dot { background: #2B5FD9; }
+			.wip       .status-dot { background: #C9A84C; }
+			.cancelled .status-dot { background: #E07070; }
 		</style>
 	</head>
 	<body>
 		<Header />
 
-		<!-- ── HERO ─────────────────────────────────────────────────────── -->
 		<main>
 			<div class="page-content">
 				<section class="hero-section">
 
-					<!-- Showcase / demo reel video -->
-					<!-- FIX: added hero-video-spacer for explicit padding beneath the video -->
 					<div class="hero-video-spacer">
 						<div class="hero-video-wrapper">
 							<video autoplay muted loop playsinline>
@@ -474,10 +501,9 @@ const projects = [
 				</section>
 			</div>
 
-			<!-- ── SKILLS TICKER ──────────────────────────────────────────── -->
+			<!-- ── Skills ticker ──────────────────────────────────────────── -->
 			<div class="skills-strip">
 				<div class="skills-scroll" aria-hidden="true">
-					<!-- duplicated for seamless loop -->
 					{["C#","Unity","Unreal Engine","C++","Gameplay Systems","AI & Behavior Trees","Procedural Generation","Shader Dev","Combat Systems","Blueprint Scripting","Networking","Git"].map(s => (
 						<span class="skill-chip">{s}</span>
 					))}
@@ -489,7 +515,7 @@ const projects = [
 
 			<div class="page-content">
 
-				<!-- ── FEATURED WORK ───────────────────────────────────────── -->
+				<!-- ── Featured Work ───────────────────────────────────────── -->
 				<section class="section-work" id="work">
 					<p class="section-label">Selected Projects</p>
 					<h2 class="section-heading">Featured Work</h2>
@@ -500,9 +526,7 @@ const projects = [
 								<div class="project-media">
 									<video
 										src={project.video}
-										muted
-										loop
-										playsinline
+										muted loop playsinline
 										onmouseover="this.play()"
 										onmouseout="this.pause()"
 									/>
@@ -533,7 +557,7 @@ const projects = [
 					</div>
 				</section>
 
-				<!-- ── PROFESSIONAL CREDITS ───────────────────────────────── -->
+				<!-- ── Professional Credits ───────────────────────────────── -->
 				<section class="section-credits" id="credits">
 					<p class="section-label">Industry Work</p>
 					<h2 class="section-heading">Professional Credits</h2>
@@ -554,14 +578,12 @@ const projects = [
 									<td class="td-project">Your Game Title</td>
 									<td class="td-role">Lead Coder</td>
 									<td>
-										<!-- FIX: status is now a styled pill with explicit light color -->
 										<span class="status-pill released">
 											<span class="status-dot"></span>
 											Public Release
 										</span>
 									</td>
 								</tr>
-								<!-- Add more rows here -->
 							</tbody>
 						</table>
 					</div>
