@@ -1,14 +1,21 @@
 ---
-import BaseHead from '../../components/BaseHead.astro';
-import Header from '../../components/Header.astro';
-import Footer from '../../components/Footer.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
-import { getCollection } from 'astro:content';
-import FormattedDate from '../../components/FormattedDate.astro';
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import { Github, Globe, Play } from '@lucide/astro';
 
-const posts = (await getCollection('blog')).sort(
-	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-);
+const projects = [
+  {
+    title: "Project Name",
+    description: "Briefly explain the tech stack and your 'Polymath' role here.",
+    tags: ["Astro", "C#", "Unity"],
+    video: "/videos/project-demo.mp4",
+    github: "https://github.com/hickersonloren",
+    link: "#"
+  },
+  // Add more projects here
+];
 ---
 
 <!doctype html>
@@ -16,96 +23,553 @@ const posts = (await getCollection('blog')).sort(
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 		<style>
-			main {
-				width: 960px;
+			/* ── Page-level layout ────────────────────────────────────────── */
+			body {
+				/* Ensure the dark bg covers the whole page, not just 600px */
+				background-color: #0B0C0E;
+				/* Offset fixed header so content isn't hidden beneath it */
+				padding-top: 64px;
 			}
-			ul {
+
+			.page-content {
+				max-width: 1100px;
+				margin: 0 auto;
+				padding: 0 2rem;
+			}
+
+			/* ── Hero section ─────────────────────────────────────────────── */
+			.hero-section {
+				padding: 5rem 0 0;
 				display: flex;
-				flex-wrap: wrap;
-				gap: 2rem;
-				list-style-type: none;
-				margin: 0;
-				padding: 0;
-			}
-			ul li {
-				width: calc(50% - 1rem);
-			}
-			ul li * {
-				text-decoration: none;
-				transition: 0.2s ease;
-			}
-			ul li:first-child {
-				width: 100%;
-				margin-bottom: 1rem;
+				flex-direction: column;
+				align-items: center;
 				text-align: center;
 			}
-			ul li:first-child img {
+
+			.hero-video-wrapper {
+				position: relative;
 				width: 100%;
+				max-width: 900px;
+				aspect-ratio: 16 / 9;
+				border-radius: 4px;
+				overflow: hidden;
+				border: 0.5px solid rgba(201,168,76,0.25);
+				box-shadow: 0 0 60px rgba(0,0,0,0.6);
+				/* FIX: was mb-10 only — now has explicit bottom margin for breathing room */
+				margin-bottom: 3.5rem;
 			}
-			ul li:first-child .title {
-				font-size: 2.369rem;
+
+			/* FIX: padding BELOW the showcase video before the heading */
+			.hero-video-spacer {
+				padding-bottom: 1rem;
 			}
-			ul li img {
-				margin-bottom: 0.5rem;
-				border-radius: 12px;
-			}
-			ul li a {
+
+			.hero-video-wrapper video {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
 				display: block;
 			}
-			.title {
-				margin: 0;
-				color: rgb(var(--black));
-				line-height: 1;
+
+			.hero-play-overlay {
+				position: absolute;
+				inset: 0;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				background: rgba(0,0,0,0.35);
+				opacity: 0;
+				transition: opacity 0.2s;
+				cursor: pointer;
 			}
-			.date {
-				margin: 0;
-				color: rgb(var(--gray));
+			.hero-video-wrapper:hover .hero-play-overlay {
+				opacity: 1;
 			}
-			ul li a:hover h4,
-			ul li a:hover .date {
-				color: rgb(var(--accent));
+
+			.hero-reel-label {
+				position: absolute;
+				bottom: 1rem;
+				left: 1.25rem;
+				font-family: 'Courier New', monospace;
+				font-size: 0.65rem;
+				font-weight: 700;
+				letter-spacing: 0.2em;
+				text-transform: uppercase;
+				color: #C9A84C;
+				pointer-events: none;
 			}
-			ul a:hover img {
-				box-shadow: var(--box-shadow);
+
+			.hero-name {
+				font-size: clamp(3rem, 9vw, 6.5rem);
+				font-weight: 900;
+				letter-spacing: -0.02em;
+				line-height: 0.95;
+				/* FIX: gradient clip text — explicit color fallback is now light */
+				color: #F0EDE6;
+				background: linear-gradient(135deg, #F0EDE6 30%, #C9A84C 100%);
+				-webkit-background-clip: text;
+				-webkit-text-fill-color: transparent;
+				background-clip: text;
+				margin-bottom: 1.25rem;
 			}
-			@media (max-width: 720px) {
-				ul {
-					gap: 0.5em;
-				}
-				ul li {
-					width: 100%;
-					text-align: center;
-				}
-				ul li:first-child {
-					margin-bottom: 0;
-				}
-				ul li:first-child .title {
-					font-size: 1.563em;
-				}
+
+			.hero-tagline {
+				/* FIX: explicit light secondary color — no inherited dark */
+				color: #9A9590;
+				font-size: clamp(0.95rem, 2vw, 1.1rem);
+				max-width: 560px;
+				margin: 0 auto 2.5rem;
+				line-height: 1.7;
 			}
+
+			.hero-cta-group {
+				display: flex;
+				gap: 1rem;
+				justify-content: center;
+				flex-wrap: wrap;
+				padding-bottom: 5rem;
+			}
+
+			.btn {
+				display: inline-flex;
+				align-items: center;
+				gap: 0.5rem;
+				padding: 0.7rem 1.8rem;
+				border-radius: 2px;
+				font-family: 'Courier New', monospace;
+				font-size: 0.72rem;
+				font-weight: 700;
+				letter-spacing: 0.15em;
+				text-transform: uppercase;
+				text-decoration: none;
+				transition: all 0.2s;
+			}
+			.btn-primary {
+				background: #C9A84C;
+				color: #0B0C0E;
+				border: none;
+			}
+			.btn-primary:hover {
+				background: #ddb95a;
+				color: #0B0C0E;
+				transform: translateY(-1px);
+			}
+			.btn-ghost {
+				background: transparent;
+				color: #F0EDE6;
+				border: 0.5px solid rgba(255,255,255,0.2);
+			}
+			.btn-ghost:hover {
+				border-color: #C9A84C;
+				color: #C9A84C;
+			}
+
+			/* ── Skills ticker ────────────────────────────────────────────── */
+			.skills-strip {
+				background: #111318;
+				border-top: 0.5px solid rgba(255,255,255,0.07);
+				border-bottom: 0.5px solid rgba(255,255,255,0.07);
+				padding: 1.25rem 0;
+				overflow: hidden;
+				position: relative;
+			}
+
+			.skills-scroll {
+				display: flex;
+				gap: 1.5rem;
+				animation: scrollLeft 28s linear infinite;
+				width: max-content;
+				align-items: center;
+			}
+
+			.skill-chip {
+				display: flex;
+				align-items: center;
+				gap: 0.4rem;
+				font-family: 'Courier New', monospace;
+				font-size: 0.68rem;
+				font-weight: 700;
+				letter-spacing: 0.1em;
+				text-transform: uppercase;
+				/* FIX: explicit light color on dark strip */
+				color: #9A9590;
+				white-space: nowrap;
+				padding: 0.25rem 0.8rem;
+				border: 0.5px solid rgba(255,255,255,0.07);
+				border-radius: 2px;
+			}
+			.skill-chip::before {
+				content: '';
+				width: 4px;
+				height: 4px;
+				border-radius: 50%;
+				background: #C9A84C;
+				flex-shrink: 0;
+			}
+
+			@keyframes scrollLeft {
+				from { transform: translateX(0); }
+				to   { transform: translateX(-50%); }
+			}
+
+			/* ── Featured Work section ────────────────────────────────────── */
+			.section-work {
+				padding: 5rem 0;
+			}
+
+			.section-label {
+				font-family: 'Courier New', monospace;
+				font-size: 0.68rem;
+				font-weight: 700;
+				letter-spacing: 0.28em;
+				text-transform: uppercase;
+				/* FIX: explicit gold — not inherited dark */
+				color: #C9A84C;
+				margin-bottom: 0.75rem;
+				display: flex;
+				align-items: center;
+				gap: 0.75rem;
+			}
+			.section-label::after {
+				content: '';
+				height: 0.5px;
+				width: 60px;
+				background: rgba(201,168,76,0.3);
+			}
+
+			.section-heading {
+				/* FIX: explicit light heading color */
+				color: #F0EDE6;
+				font-size: clamp(1.8rem, 4vw, 2.8rem);
+				font-weight: 900;
+				letter-spacing: -0.01em;
+				margin-bottom: 3rem;
+			}
+
+			.projects-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+				gap: 1.5rem;
+			}
+
+			.project-card {
+				background: #161A22;
+				border: 0.5px solid rgba(255,255,255,0.07);
+				overflow: hidden;
+				transition: border-color 0.25s, transform 0.25s;
+			}
+			.project-card:hover {
+				border-color: rgba(201,168,76,0.35);
+				transform: translateY(-3px);
+			}
+
+			.project-media {
+				aspect-ratio: 16 / 9;
+				overflow: hidden;
+				background: #0d1017;
+				position: relative;
+			}
+			.project-media video,
+			.project-media img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+				display: block;
+				transition: transform 0.4s, opacity 0.3s;
+				opacity: 0.75;
+			}
+			.project-card:hover .project-media video,
+			.project-card:hover .project-media img {
+				transform: scale(1.04);
+				opacity: 1;
+			}
+
+			.project-body {
+				padding: 1.5rem;
+			}
+
+			.project-title {
+				/* FIX: explicit light color */
+				color: #F0EDE6;
+				font-size: 1.2rem;
+				font-weight: 700;
+				margin-bottom: 0.5rem;
+			}
+
+			.project-desc {
+				/* FIX: explicit secondary light color — was inheriting gray-dark */
+				color: #9A9590;
+				font-size: 0.875rem;
+				line-height: 1.65;
+				margin-bottom: 1.25rem;
+			}
+
+			.project-tags {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 0.4rem;
+				margin-bottom: 1.25rem;
+			}
+
+			.project-tag {
+				font-family: 'Courier New', monospace;
+				font-size: 0.6rem;
+				font-weight: 700;
+				letter-spacing: 0.1em;
+				text-transform: uppercase;
+				/* FIX: explicit colors — not inherited */
+				background: rgba(201,168,76,0.08);
+				color: #C9A84C;
+				border: 0.5px solid rgba(201,168,76,0.2);
+				padding: 0.2rem 0.6rem;
+				border-radius: 2px;
+			}
+
+			.project-links {
+				display: flex;
+				gap: 1.25rem;
+				padding-top: 1rem;
+				border-top: 0.5px solid rgba(255,255,255,0.07);
+			}
+
+			.project-link {
+				display: flex;
+				align-items: center;
+				gap: 0.4rem;
+				font-family: 'Courier New', monospace;
+				font-size: 0.65rem;
+				font-weight: 700;
+				letter-spacing: 0.1em;
+				text-transform: uppercase;
+				/* FIX: explicit muted light */
+				color: #5C5850;
+				text-decoration: none;
+				transition: color 0.2s;
+			}
+			.project-link:hover { color: #C9A84C; }
+
+			/* ── Credits table ────────────────────────────────────────────── */
+			.section-credits {
+				padding: 5rem 0;
+				border-top: 0.5px solid rgba(255,255,255,0.07);
+			}
+
+			.credits-table {
+				width: 100%;
+				border-collapse: collapse;
+				margin-top: 0;
+				font-size: 0.9rem;
+			}
+
+			.credits-table thead tr {
+				border-bottom: 0.5px solid rgba(201,168,76,0.25);
+			}
+
+			.credits-table th {
+				font-family: 'Courier New', monospace;
+				font-size: 0.62rem;
+				font-weight: 700;
+				letter-spacing: 0.22em;
+				text-transform: uppercase;
+				/* FIX: explicit gold — was inheriting text-slate-500 which is too dim */
+				color: #C9A84C;
+				padding: 0.75rem 0.75rem 0.75rem 0;
+				text-align: left;
+			}
+
+			.credits-table td {
+				padding: 1rem 0.75rem 1rem 0;
+				border-bottom: 0.5px solid rgba(255,255,255,0.07);
+				vertical-align: middle;
+				/* FIX: was unset — now explicit light so it reads on dark background */
+				color: #F0EDE6;
+			}
+
+			.credits-table tr:last-child td { border-bottom: none; }
+			.credits-table tbody tr:hover td {
+				background: rgba(201,168,76,0.03);
+			}
+
+			.td-year {
+				font-family: 'Courier New', monospace;
+				font-size: 0.8rem;
+				/* FIX: explicit muted-light for year column */
+				color: #5C5850 !important;
+				letter-spacing: 0.06em;
+			}
+
+			.td-project {
+				font-weight: 700;
+				/* FIX: explicit primary-light — was text-white which needs dark bg */
+				color: #F0EDE6 !important;
+			}
+
+			.td-role {
+				/* FIX: was text-blue-400 — now gold for palette consistency */
+				color: #C9A84C !important;
+			}
+
+			.status-pill {
+				display: inline-flex;
+				align-items: center;
+				gap: 0.35rem;
+				font-family: 'Courier New', monospace;
+				font-size: 0.6rem;
+				font-weight: 700;
+				letter-spacing: 0.1em;
+				text-transform: uppercase;
+				padding: 0.22rem 0.65rem;
+				border-radius: 2px;
+			}
+			.status-pill.released {
+				background: rgba(26,74,26,0.5);
+				/* FIX: explicit light green — was inheriting text-xs with no color set */
+				color: #6FCF97;
+				border: 0.5px solid rgba(111,207,151,0.2);
+			}
+			.status-pill.wip {
+				background: rgba(74,55,10,0.5);
+				color: #F2C94C;
+				border: 0.5px solid rgba(242,201,76,0.2);
+			}
+			.status-dot {
+				width: 5px; height: 5px;
+				border-radius: 50%;
+				flex-shrink: 0;
+			}
+			.released .status-dot { background: #6FCF97; }
+			.wip      .status-dot { background: #F2C94C; }
 		</style>
 	</head>
 	<body>
 		<Header />
+
+		<!-- ── HERO ─────────────────────────────────────────────────────── -->
 		<main>
-			<section>
-				<ul>
-					{
-						posts.map((post) => (
-							<li>
-								<a href={`/blog/${post.id}/`}>
-									<img width={720} height={360} src={post.data.heroImage} alt="" />
-									<h4 class="title">{post.data.title}</h4>
-									<p class="date">
-										<FormattedDate date={post.data.pubDate} />
-									</p>
-								</a>
-							</li>
-						))
-					}
-				</ul>
-			</section>
+			<div class="page-content">
+				<section class="hero-section">
+
+					<!-- Showcase / demo reel video -->
+					<!-- FIX: added hero-video-spacer for explicit padding beneath the video -->
+					<div class="hero-video-spacer">
+						<div class="hero-video-wrapper">
+							<video autoplay muted loop playsinline>
+								<source src="/videos/demo-reel.mp4" type="video/mp4" />
+							</video>
+							<div class="hero-play-overlay" aria-hidden="true">
+								<Play size={56} color="#C9A84C" />
+							</div>
+							<span class="hero-reel-label">Demo Reel 2024</span>
+						</div>
+					</div>
+
+					<h1 class="hero-name">MYTHRIL PHOENIX</h1>
+					<p class="hero-tagline">
+						Gameplay Programmer &amp; Systems Architect. I build immersive worlds and the code that powers them.
+					</p>
+					<div class="hero-cta-group">
+						<a href="#work" class="btn btn-primary">View My Work</a>
+						<a href="#contact" class="btn btn-ghost">Get in Touch</a>
+					</div>
+				</section>
+			</div>
+
+			<!-- ── SKILLS TICKER ──────────────────────────────────────────── -->
+			<div class="skills-strip">
+				<div class="skills-scroll" aria-hidden="true">
+					<!-- duplicated for seamless loop -->
+					{["C#","Unity","Unreal Engine","C++","Gameplay Systems","AI & Behavior Trees","Procedural Generation","Shader Dev","Combat Systems","Blueprint Scripting","Networking","Git"].map(s => (
+						<span class="skill-chip">{s}</span>
+					))}
+					{["C#","Unity","Unreal Engine","C++","Gameplay Systems","AI & Behavior Trees","Procedural Generation","Shader Dev","Combat Systems","Blueprint Scripting","Networking","Git"].map(s => (
+						<span class="skill-chip">{s}</span>
+					))}
+				</div>
+			</div>
+
+			<div class="page-content">
+
+				<!-- ── FEATURED WORK ───────────────────────────────────────── -->
+				<section class="section-work" id="work">
+					<p class="section-label">Selected Projects</p>
+					<h2 class="section-heading">Featured Work</h2>
+
+					<div class="projects-grid">
+						{projects.map((project) => (
+							<div class="project-card">
+								<div class="project-media">
+									<video
+										src={project.video}
+										muted
+										loop
+										playsinline
+										onmouseover="this.play()"
+										onmouseout="this.pause()"
+									/>
+								</div>
+								<div class="project-body">
+									<h3 class="project-title">{project.title}</h3>
+									<p class="project-desc">{project.description}</p>
+									<div class="project-tags">
+										{project.tags.map(tag => (
+											<span class="project-tag">{tag}</span>
+										))}
+									</div>
+									<div class="project-links">
+										{project.github && (
+											<a href={project.github} class="project-link" target="_blank" rel="noopener">
+												<Github size={14} /> Source
+											</a>
+										)}
+										{project.link && project.link !== "#" && (
+											<a href={project.link} class="project-link" target="_blank" rel="noopener">
+												<Globe size={14} /> Live
+											</a>
+										)}
+									</div>
+								</div>
+							</div>
+						))}
+					</div>
+				</section>
+
+				<!-- ── PROFESSIONAL CREDITS ───────────────────────────────── -->
+				<section class="section-credits" id="credits">
+					<p class="section-label">Industry Work</p>
+					<h2 class="section-heading">Professional Credits</h2>
+
+					<div style="overflow-x: auto;">
+						<table class="credits-table">
+							<thead>
+								<tr>
+									<th>Year</th>
+									<th>Project</th>
+									<th>Role</th>
+									<th>Status</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td class="td-year">2024</td>
+									<td class="td-project">Your Game Title</td>
+									<td class="td-role">Lead Coder</td>
+									<td>
+										<!-- FIX: status is now a styled pill with explicit light color -->
+										<span class="status-pill released">
+											<span class="status-dot"></span>
+											Public Release
+										</span>
+									</td>
+								</tr>
+								<!-- Add more rows here -->
+							</tbody>
+						</table>
+					</div>
+				</section>
+
+			</div>
 		</main>
+
 		<Footer />
 	</body>
 </html>

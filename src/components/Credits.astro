@@ -5,16 +5,89 @@ const credits = [
   { year: '2022', role: 'Full-stack Dev', project: 'Asset Pipeline Tool', company: 'Internal Project' },
 ];
 ---
-<section class="py-20 px-4 max-w-5xl mx-auto">
-  <h2 class="text-3xl font-bold text-white mb-10">Select Credits</h2>
-  <div class="space-y-4">
+
+<section class="credits-section">
+  <h2 class="credits-heading">Select Credits</h2>
+  <div class="credits-list">
     {credits.map(item => (
-      <div class="grid grid-cols-4 border-b border-slate-800 py-4 hover:bg-slate-900/50 transition-colors px-4">
-        <span class="text-slate-500 font-mono">{item.year}</span>
-        <span class="text-white font-bold">{item.role}</span>
-        <span class="text-blue-400">{item.project}</span>
-        <span class="text-slate-400 text-right">{item.company}</span>
+      <div class="credit-row">
+        <!-- FIX: all text colours are now explicit light values, not inherited dark -->
+        <span class="credit-year">{item.year}</span>
+        <span class="credit-role">{item.role}</span>
+        <span class="credit-project">{item.project}</span>
+        <span class="credit-company">{item.company}</span>
       </div>
     ))}
   </div>
 </section>
+
+<style>
+  .credits-section {
+    padding: 5rem 1rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .credits-heading {
+    /* FIX: explicit light color — no longer inherits rgb(var(--black)) */
+    color: #F0EDE6;
+    font-size: 1.953em;
+    margin-bottom: 2.5rem;
+  }
+
+  .credits-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .credit-row {
+    display: grid;
+    grid-template-columns: 80px 1fr 1fr 1fr;
+    border-bottom: 0.5px solid rgba(255,255,255,0.07);
+    padding: 1.1rem 1rem;
+    transition: background 0.15s;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .credit-row:hover {
+    background: rgba(201,168,76,0.04);
+  }
+
+  /* FIX: was text-slate-500 (too dark on dark bg) — now explicit light-muted */
+  .credit-year {
+    color: #5C5850;
+    font-family: 'Courier New', monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+  }
+
+  /* FIX: was text-white with font-bold — kept light, now with explicit color */
+  .credit-role {
+    color: #F0EDE6;
+    font-weight: 700;
+    font-size: 0.9rem;
+  }
+
+  /* FIX: was text-blue-400 — now gold accent for palette consistency */
+  .credit-project {
+    color: #C9A84C;
+    font-size: 0.9rem;
+  }
+
+  /* FIX: was text-slate-400 (reads poorly on dark) — now explicit secondary light */
+  .credit-company {
+    color: #9A9590;
+    font-size: 0.9rem;
+    text-align: right;
+  }
+
+  @media (max-width: 640px) {
+    .credit-row {
+      grid-template-columns: 60px 1fr;
+      grid-template-rows: auto auto;
+    }
+    .credit-company { text-align: left; }
+  }
+</style>
